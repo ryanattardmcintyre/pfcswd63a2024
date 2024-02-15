@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Models;
 using System.Diagnostics;
+using WebApplication1.Models;
 
-namespace Presentation.Controllers
+namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
@@ -15,11 +14,12 @@ namespace Presentation.Controllers
             _logger = logger;
         }
 
+
         public IActionResult Index()
         {
             return View();
         }
-   
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
@@ -29,20 +29,6 @@ namespace Presentation.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-
-        [Authorize]
-        public IActionResult MembersLanding() //a page where logged in users can be
-        {
-            return View();
-        }
-
-        [Authorize]
-        public async Task<IActionResult> Logout() {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index","Home");  //Home/Index is a landing page for everyone
-
         }
     }
 }
