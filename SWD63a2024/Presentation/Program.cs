@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Presentation.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Presentation.Repositories;
 
 namespace Presentation
 {
@@ -12,15 +13,21 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-           /* var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            string pathToKeyFile = builder.Environment.ContentRootPath + "swd63apfc2024-3564063f03d7.json";
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-           */
+
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", pathToKeyFile );
+
+
+            // Add services to the container.
+            /* var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+             builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                 options.UseSqlServer(connectionString));
+             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            */
             builder.Services.AddControllersWithViews();
            
             builder.Services
@@ -36,7 +43,11 @@ namespace Presentation
                     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                 });
 
-           
+
+            string project = builder.Configuration["project"];
+
+            builder.Services.AddScoped(x=>new BlogsRepository(project));
+
 
             builder.Services.AddRazorPages();
 
