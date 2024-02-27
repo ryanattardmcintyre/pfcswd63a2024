@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Presentation.Models;
 using System.Configuration;
 
@@ -9,6 +10,8 @@ namespace Presentation.Repositories
         FirestoreDb db;
         public BlogsRepository(string project) {
             db = FirestoreDb.Create(project); 
+
+            
         }
         public async void Add(Blog blog)
         {
@@ -17,6 +20,26 @@ namespace Presentation.Repositories
             DocumentReference docRef = db.Collection("blogs").Document(blog.Id);
            
             await docRef.SetAsync(blog);
+        }
+
+        public async Task<List<Blog>> GetBlogs()
+        {
+            Query allBlogsQuery = db.Collection("blogs");
+            QuerySnapshot allBlogsQuerySnapshot = await allBlogsQuery.GetSnapshotAsync();
+
+            List<Blog> blogs = new List<Blog>();
+
+            foreach (DocumentSnapshot documentSnapshot in allBlogsQuerySnapshot.Documents)
+            {
+                Blog b = documentSnapshot.ConvertTo<Blog>();
+                b.Id = documentSnapshot.Id;
+
+                blogs.Add(b);
+
+            }
+            return blogs;
+
+            
         }
     }
 }

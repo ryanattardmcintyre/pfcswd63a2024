@@ -46,7 +46,10 @@ namespace Presentation
 
             string project = builder.Configuration["project"];
 
+            //these lines will register application services Or services built by the developer with the services collection
+            //so the application knows about them when they will requested via constructor/method injection
             builder.Services.AddScoped(x=>new BlogsRepository(project));
+            builder.Services.AddScoped(x => new PostsRepository(project));
 
 
             builder.Services.AddRazorPages();
