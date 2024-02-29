@@ -13,9 +13,16 @@ namespace Presentation.Controllers
         public BlogsController(BlogsRepository _blogsRepository) { 
             blogsRepository= _blogsRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Blog> list = await blogsRepository.GetBlogs();
+            return View(list);
+        }
+
+        public async Task<IActionResult> Search(string search)
+        {
+            List<Blog> list = await blogsRepository.GetBlogs(search);
+            return View("Index",list);
         }
 
 
@@ -33,6 +40,10 @@ namespace Presentation.Controllers
             blog.DateUpdated = Timestamp.FromDateTime(DateTime.UtcNow);
 
             blogsRepository.Add(blog);
+
+
+          
+
 
             return View(blog);
         }

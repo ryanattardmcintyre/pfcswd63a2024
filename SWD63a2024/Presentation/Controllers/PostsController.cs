@@ -35,5 +35,20 @@ namespace Presentation.Controllers
             return View(post); 
         
         }
+
+        public async Task<IActionResult> Index(string id)
+        {
+            //id = blogId
+
+            var listOfPosts = await postsRepository.GetPosts(id);
+            return View(listOfPosts);
+        }
+
+        public async Task<IActionResult> Read(string blogId, string postId)
+        {
+            var myPost = await postsRepository.GetPostForBlog(blogId, postId);
+            return View(myPost);
+        }
+
     }
 }

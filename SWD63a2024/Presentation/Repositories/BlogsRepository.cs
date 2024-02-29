@@ -35,11 +35,30 @@ namespace Presentation.Repositories
                 b.Id = documentSnapshot.Id;
 
                 blogs.Add(b);
+            }
 
+             
+
+            return blogs;
+        }
+
+        public async Task<List<Blog>> GetBlogs(string keyword)
+        {
+            Query allBlogsQuery = db.Collection("blogs").WhereEqualTo("Name", keyword);
+            QuerySnapshot allBlogsQuerySnapshot = await allBlogsQuery.GetSnapshotAsync();
+
+            List<Blog> blogs = new List<Blog>();
+
+            foreach (DocumentSnapshot documentSnapshot in allBlogsQuerySnapshot.Documents)
+            {
+                Blog b = documentSnapshot.ConvertTo<Blog>();
+                b.Id = documentSnapshot.Id;
+
+                blogs.Add(b);
             }
             return blogs;
 
-            
+
         }
     }
 }

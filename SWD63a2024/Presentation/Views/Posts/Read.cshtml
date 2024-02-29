@@ -1,0 +1,27 @@
+﻿@model Presentation.Models.Post
+
+@{
+    ViewData["Title"] = "Read";
+}
+
+<h1>Read</h1>
+
+<div>
+    <h4>Post</h4>
+    <hr />
+    
+        
+       <h1>@Model.Title</h1>
+
+       <br />
+       <div style="border: solid 1px black; margin:5px; width: auto">
+           @Model.Content 
+       </div>
+       <br />
+       <span>@Model.DateCreated.ToDateTime().ToLongDateString()</span>
+    
+</div>
+<div>
+   
+    <a href="/Posts/Index?id=@Model.BlogId">Back to List</a>
+</div>
