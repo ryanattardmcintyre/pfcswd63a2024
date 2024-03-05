@@ -8,10 +8,11 @@ namespace Presentation.Repositories
     public class BlogsRepository
     {
         FirestoreDb db;
-        public BlogsRepository(string project) {
+        PostsRepository _postsRepository;
+        public BlogsRepository(string project, PostsRepository postRepo) {
             db = FirestoreDb.Create(project); 
 
-            
+            _postsRepository = postRepo;
         }
         public async void Add(Blog blog)
         {
@@ -59,6 +60,37 @@ namespace Presentation.Repositories
             return blogs;
 
 
+        }
+
+
+        public async Task<bool> DeleteBlog(string blogId)
+        {
+            var listOfPosts = await _postsRepository.GetPosts(blogId);
+
+            if (listOfPosts.Count == 0)
+            { 
+                 DocumentReference blogRef = db.Collection("blogs").Document(blogId);
+                    await blogRef.DeleteAsync();
+                return true;
+            }
+            else
+            {
+                //throw exception
+            }
+            return false;
+
+
+        }
+
+        public async Task<Google.Cloud.Firestore.WriteResult> UpdateBlog(Blog b)
+        {
+            DocumentReference blogRef = db.Collection("blogs").Document(b.Id);
+            Dictionary<string, object> updates = new Dictionary<string, object>
+            {
+                { "Name", b.Name },
+                { "DateUpdated", Timestamp.FromDateTime(DateTime.UtcNow) }
+            };
+            return await blogRef.UpdateAsync(updates);
         }
     }
 }

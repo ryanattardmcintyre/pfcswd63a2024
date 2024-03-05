@@ -48,8 +48,11 @@ namespace Presentation
 
             //these lines will register application services Or services built by the developer with the services collection
             //so the application knows about them when they will requested via constructor/method injection
-            builder.Services.AddScoped(x=>new BlogsRepository(project));
-            builder.Services.AddScoped(x => new PostsRepository(project));
+
+            PostsRepository pr = new PostsRepository(project);
+
+            builder.Services.AddScoped(x=>new BlogsRepository(project, pr));
+            builder.Services.AddScoped(x => pr);
 
 
             builder.Services.AddRazorPages();

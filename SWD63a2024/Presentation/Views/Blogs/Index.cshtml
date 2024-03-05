@@ -34,6 +34,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Author)
             </th>
+            <th>
+                Date Created
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -50,9 +53,12 @@
                 @Html.DisplayFor(modelItem => item.Author)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                <span>@item.DateCreated.ToDateTime().ToString("dd/MM/yyyy")</span>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                 @Html.ActionLink("See Posts", "Index", "Posts", new { id=item.Id  }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new {   id=item.Id   })
             </td>
         </tr>
 }

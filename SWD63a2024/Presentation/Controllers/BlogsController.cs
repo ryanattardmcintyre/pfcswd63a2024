@@ -41,11 +41,29 @@ namespace Presentation.Controllers
 
             blogsRepository.Add(blog);
 
-
-          
-
-
             return View(blog);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Delete(string id)
+        {
+             await  blogsRepository.DeleteBlog(id);
+            return RedirectToAction("Index");
+        }
+
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var list = await blogsRepository.GetBlogs();
+            return View(list.SingleOrDefault(x => x.Id == id));
+        }
+
+        [HttpPost, Authorize]
+        public async Task<IActionResult> Edit(Blog blog)
+        {
+            await blogsRepository.UpdateBlog(blog);
+            return RedirectToAction("Index");
+        
         }
     }
 }

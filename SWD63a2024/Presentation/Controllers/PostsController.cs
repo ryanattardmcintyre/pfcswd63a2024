@@ -32,6 +32,8 @@ namespace Presentation.Controllers
 
             postsRepository.Add(post);
 
+            ViewBag.BlogId = post.BlogId;
+
             return View(post); 
         
         }
@@ -39,7 +41,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Index(string id)
         {
             //id = blogId
-
+            ViewBag.BlogId = id;
             var listOfPosts = await postsRepository.GetPosts(id);
             return View(listOfPosts);
         }

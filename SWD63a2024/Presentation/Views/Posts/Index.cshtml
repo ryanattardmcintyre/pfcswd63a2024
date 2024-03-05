@@ -7,7 +7,15 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @{
+        var blogId="";
+        if(ViewBag.BlogId !=null)
+        {
+            blogId = ViewBag.BlogId;
+        }
+    }
+    
+    <a href="/Posts/Create?blogId=@blogId">Create New</a>
 </p>
 <table class="table">
     <thead>
