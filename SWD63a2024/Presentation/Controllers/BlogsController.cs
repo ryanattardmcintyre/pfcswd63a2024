@@ -9,9 +9,11 @@ namespace Presentation.Controllers
     public class BlogsController : Controller
     {
         private BlogsRepository blogsRepository;
+        private BucketRepository bucketRepository;
 
-        public BlogsController(BlogsRepository _blogsRepository) { 
+        public BlogsController(BlogsRepository _blogsRepository, BucketRepository _bucketRepository) { 
             blogsRepository= _blogsRepository;
+            bucketRepository= _bucketRepository;
         }
         public async Task<IActionResult> Index()
         {
@@ -33,8 +35,25 @@ namespace Presentation.Controllers
 
         [Authorize]
         [HttpPost] //this is triggered after the user submits the blogs data and you process it
-        public IActionResult Create(Blog blog)
+        public async Task<IActionResult> Create(Blog blog, IFormFile file)
         {
+            string newFilename = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(file.FileName);
+            MemoryStream fileAsAStream = new MemoryStream();
+            file.CopyTo(fileAsAStream);
+
+            //using (var s = file.OpenReadStream())
+            //{
+            //    s.CopyTo(fileAsAStream);
+            //}
+
+            await bucketRepository.UploadFile(fileAsAStream, newFilename);
+            bucketRepository.GrantPermissionToFile(newFilename, "ryanattard@gmail.com");
+
+            //finegrained bucket = https://storage.cloud.google.com/swd63apfc2024ra_fg/laptop.png;
+            //uniform bucket = https://storage.googleapis.com/swd63apfc2024ra/{newFilename}
+
+
+            blog.Uri = $"https://storage.cloud.google.com/swd63apfc2024ra_fg/{newFilename}";
             blog.Author = User.Identity.Name;
             blog.DateCreated = Timestamp.FromDateTime(DateTime.UtcNow);
             blog.DateUpdated = Timestamp.FromDateTime(DateTime.UtcNow);

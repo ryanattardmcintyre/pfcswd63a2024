@@ -17,7 +17,9 @@ namespace Presentation.Models
         public Google.Cloud.Firestore.Timestamp DateCreated { get; set; }
         [FirestoreProperty]
         public Google.Cloud.Firestore.Timestamp DateUpdated { get; set; }
-    
+
+        [FirestoreProperty]
+        public string Uri { get; set; }
         
     }
 }

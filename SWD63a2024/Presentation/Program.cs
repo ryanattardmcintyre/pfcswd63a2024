@@ -54,6 +54,10 @@ namespace Presentation
             builder.Services.AddScoped(x=>new BlogsRepository(project, pr));
             builder.Services.AddScoped(x => pr);
 
+            //uniform bucket =swd63apfc2024ra
+            //finegraned bucket = swd63apfc2024ra_fg
+            builder.Services.AddScoped(x => new BucketRepository(project, "swd63apfc2024ra_fg"));
+
 
             builder.Services.AddRazorPages();
 
