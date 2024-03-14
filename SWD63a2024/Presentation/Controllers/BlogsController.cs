@@ -10,10 +10,13 @@ namespace Presentation.Controllers
     {
         private BlogsRepository blogsRepository;
         private BucketRepository bucketRepository;
-
-        public BlogsController(BlogsRepository _blogsRepository, BucketRepository _bucketRepository) { 
+        private PubSubRepository pubSubRepository;
+        public BlogsController(BlogsRepository _blogsRepository, 
+            BucketRepository _bucketRepository,
+            PubSubRepository _pubsubRepository) { 
             blogsRepository= _blogsRepository;
             bucketRepository= _bucketRepository;
+            pubSubRepository = _pubsubRepository;
         }
         public async Task<IActionResult> Index()
         {
@@ -83,6 +86,12 @@ namespace Presentation.Controllers
             await blogsRepository.UpdateBlog(blog);
             return RedirectToAction("Index");
         
+        }
+
+        public async Task<IActionResult> CreateReport(string blogId)
+        {
+            await pubSubRepository.PublishBlog(blogId);
+            return RedirectToAction("Index");
         }
     }
 }

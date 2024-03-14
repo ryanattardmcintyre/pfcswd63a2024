@@ -57,6 +57,7 @@ namespace Presentation
             //uniform bucket =swd63apfc2024ra
             //finegraned bucket = swd63apfc2024ra_fg
             builder.Services.AddScoped(x => new BucketRepository(project, "swd63apfc2024ra_fg"));
+            builder.Services.AddScoped(x => new PubSubRepository("swd63apfc2024_ra", project));
 
 
             builder.Services.AddRazorPages();
