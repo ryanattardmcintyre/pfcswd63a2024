@@ -64,6 +64,15 @@
                 @Html.ActionLink("See Posts", "Index", "Posts", new { id=item.Id  }) |
                 @Html.ActionLink("Delete", "Delete", new {   id=item.Id   }) |
                     @Html.ActionLink("Create Report", "CreateReport", new {   blogId=item.Id   })
+                
+               @* @if(item.Status == 1)
+                *@
+
+                    @{
+                        string filenameOfPDF = item.Id + ".pdf";
+                    }
+
+                    | <a href="https://storage.cloud.google.com/swd63apfc2024ra_fg/@filenameOfPDF">Download report</a>
             </td>
         </tr>
 }

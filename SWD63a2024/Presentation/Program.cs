@@ -4,6 +4,8 @@ using Presentation.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Presentation.Repositories;
+using PdfSharp.Fonts;
+using Presentation.Controllers;
 
 namespace Presentation
 {
@@ -58,7 +60,7 @@ namespace Presentation
             //finegraned bucket = swd63apfc2024ra_fg
             builder.Services.AddScoped(x => new BucketRepository(project, "swd63apfc2024ra_fg"));
             builder.Services.AddScoped(x => new PubSubRepository("swd63apfc2024_ra", project));
-
+            builder.Services.AddScoped<IFontResolver, FileFontResolver>();
 
             builder.Services.AddRazorPages();
 
