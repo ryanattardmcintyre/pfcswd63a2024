@@ -41,8 +41,8 @@ namespace Presentation
                 .AddCookie()
                 .AddGoogle(options =>
                 {
-                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                    options.ClientId = ""; //builder.Configuration["Authentication:Google:ClientId"];
+                    options.ClientSecret = ""; //builder.Configuration["Authentication:Google:ClientSecret"];
                 });
 
 
