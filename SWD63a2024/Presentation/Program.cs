@@ -46,6 +46,18 @@ namespace Presentation
                 });
 
 
+
+            builder.Services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+                options.OnAppendCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                options.OnDeleteCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            });
+
+
+
             string project = builder.Configuration["project"];
 
             //these lines will register application services Or services built by the developer with the services collection
@@ -83,6 +95,7 @@ namespace Presentation
 
             app.UseRouting();
 
+            app.UseCookiePolicy(); // Before UseAuthentication or anything else that writes cookies.
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -92,6 +105,21 @@ namespace Presentation
             app.MapRazorPages();
 
             app.Run();
+        }
+
+
+        private static void CheckSameSite(HttpContext httpContext, CookieOptions options)
+        {
+            if (options.SameSite == SameSiteMode.None)
+            {
+                var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+                // TODO: Use your User Agent library of choice here.
+                if (true)
+                {
+                    // For .NET Core < 3.1 set SameSite = (SameSiteMode)(-1)
+                    options.SameSite = SameSiteMode.Unspecified;
+                }
+            }
         }
     }
 }
